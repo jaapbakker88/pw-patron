@@ -106,10 +106,10 @@ app.all('/webhook', function(req, res){
         if(err) {
           console.log(err);
           payment.redirectUrl = process.env.BASEURL;
-          res.send(payment.error);
+          res.render(index);
         } else {
           payment.redirectUrl = process.env.BASEURL;
-          res.send(payment.error);
+          res.send(index);
         }
       });
       // res.render('payment-error', { 'error': payment.error });
