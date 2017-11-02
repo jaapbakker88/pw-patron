@@ -116,7 +116,7 @@ app.all('/webhook', function(req, res){
           var mailOptions = {
             from: '"'+ "Dan @ PartyWith" +'" <'+process.env.TEST_SENDER+'>', // sender address
             to: order.email, // list of receivers
-            subject: 'You’re now a Party Patron', // Subject line
+            subject: 'You’re now a 💎 Party Patron 💎', // Subject line
             text: req.body.text, // plaintext body
               html: `
                 <div id="header">Thank you for becoming a Party Patron. And welcome to the PartyWith family!</div>
