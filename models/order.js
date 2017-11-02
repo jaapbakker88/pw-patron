@@ -8,6 +8,7 @@ var orderSchema = new mongoose.Schema({
   orderId: String,
   type: String,
   amount: Number,
+  comment: String,
   order: Object
 },
 {

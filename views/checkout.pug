@@ -24,6 +24,10 @@ block content
           label.label Email Adress
           .control
             input.input(type="text" name="email" placeholder="Email Adress" required)
+        .field
+          label.label Comment (optional)
+          .control
+            textarea.textarea(name="comment")
         input(type="hidden" name="item" value=`${type}`)
       #submit-grid
         button#submit 💎 Go To Checkout 💎

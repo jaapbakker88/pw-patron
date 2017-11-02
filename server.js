@@ -79,6 +79,7 @@ app.all('/patron', function(req, res){
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           email: req.body.email,
+          comment: req.body.comment,
           orderId: payment.id,
           orderType: type,
           amount: amount,
@@ -154,7 +155,8 @@ app.all('/webhook', function(req, res){
                 <div id="body">
                   <p>
                     <strong>name:</strong> ${order.firstName} ${order.lastName} <br>
-                    <strong>email:</strong> ${order.email}
+                    <strong>email:</strong> ${order.email} <br>
+                    <strong>comment:</strong> ${order.comment}
                   </p>
                   <p><b><a href="${process.env.BASEURL}/order/${order.orderId}">${process.env.BASEURL}/order/${order.orderId}</a></b></p>  
                 </div>
