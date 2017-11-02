@@ -1,5 +1,6 @@
 // server.js
 // where your node app starts
+require('dotenv').config()
 
 // init project
 var express = require('express');
@@ -12,7 +13,6 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 
-require('dotenv').config()
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB, {useMongoClient: true})
