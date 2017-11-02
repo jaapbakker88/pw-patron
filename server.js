@@ -104,7 +104,7 @@ app.all('/webhook', function(req, res){
       res.send('Something went wrong!');
       // res.render('payment-error', { 'error': payment.error });
     }else {
-      Order.findOneAndUpdate({orderId: payment.id}, {$set:{order: {status: payment.status}}}, {new: true}, function(err, order) {
+      Order.findOneAndUpdate({orderId: payment.id}, {$set:{order: payment }}, {new: true}, function(err, order) {
         if(err) {
           console.log(err);
         } else {
