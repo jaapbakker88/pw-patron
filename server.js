@@ -12,6 +12,8 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 
+require('dotenv').config()
+
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB, {useMongoClient: true})
 
