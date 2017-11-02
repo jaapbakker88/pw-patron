@@ -101,16 +101,15 @@ app.all('/webhook', function(req, res){
   var paymentId = req.body.id;  
   mollie.payments.get(paymentId, function(payment) {
     if (payment.error || payment.status === "expired" || payment.status === "cancelled") {   
-      res.render('index')
       res.send('Something went wrong!');
       Order.findOneAndUpdate({orderId: payment.id}, {$set:{order: payment }}, {new: true}, function(err, order) {
         if(err) {
           console.log(err);
-          // res.render('index')
-          // res.send('Something went wrong!');
+          payment.redirectUrl = process.env.BASEURL;
+          res.send(payment.error);
         } else {
-          // res.render('index')
-          // res.send('Something went wrong!');
+          payment.redirectUrl = process.env.BASEURL;
+          res.send(payment.error);
         }
       });
       // res.render('payment-error', { 'error': payment.error });
