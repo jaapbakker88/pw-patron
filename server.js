@@ -120,7 +120,7 @@ app.all('/webhook', function(req, res){
             text: req.body.text, // plaintext body
               html: `
                 <div id="header">
-                  <p>Dear ${order.firstName}</p>
+                  <p>Dear ${order.firstName},</p>
                   <p>Thank you for becoming a Party Patron. Your support means so much to us. And welcome to the PartyWith family!</p>
                 </div>
                 <div id="body">
@@ -145,7 +145,7 @@ app.all('/webhook', function(req, res){
             text: req.body.text, // plaintext body
               html: `
                 <div id="header">
-                  <p>Dear ${order.firstName}</p>
+                  <p>Dear ${order.firstName},</p>
                   <p>Thank you for becoming a Super Patron. Your support means so much to us. And welcome to the PartyWith family!</p>
                 </div>
                 <div id="body">
