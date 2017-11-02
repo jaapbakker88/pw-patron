@@ -102,6 +102,14 @@ app.all('/webhook', function(req, res){
   mollie.payments.get(paymentId, function(payment) {
     if (payment.error || payment.status === "expired") {   
       res.send('Something went wrong!');
+      Order.findOneAndUpdate({orderId: payment.id}, {$set:{order: payment }}, {new: true}, function(err, order) {
+        if(err) {
+          console.log(err);
+          res.send(payment.error);
+        } else {
+          res.send(payment.error);
+        }
+      });
       // res.render('payment-error', { 'error': payment.error });
     }else {
       Order.findOneAndUpdate({orderId: payment.id}, {$set:{order: payment }}, {new: true}, function(err, order) {
