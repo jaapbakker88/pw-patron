@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  
+  #logo
+    #logo-retina 
+      img(src="https://cdn.glitch.com/b2a03dab-a7cf-4d7e-b681-64f1ed6953ee%2Flogo.png?1509531112854")
+  #container
+    #header
+      #header-info Become a #{name}
+      #header-amount $#{amount}
+    
+    form#body(action="/patron" method="POST")
+      #form-fields
+        .field
+          label.label First Name
+          .control
+            input.input(type="text" name="firstName" placeholder="First Name" required)
+        .field
+          label.label Last Name
+          .control
+            input.input(type="text" name="lastName" placeholder="Last Name" required)
+        .field
+          label.label Email Adress
+          .control
+            input.input(type="text" name="email" placeholder="Email Adress" required)
+        input(type="hidden" name="item" value=`${type}`)
+      #submit-grid
+        button#submit 💎 Go To Checkout 💎
