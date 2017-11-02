@@ -119,7 +119,10 @@ app.all('/webhook', function(req, res){
             subject: 'You’re now a 💎 Party Patron 💎', // Subject line
             text: req.body.text, // plaintext body
               html: `
-                <div id="header">Thank you for becoming a Party Patron. Your support means so much to us. And welcome to the PartyWith family!</div>
+                <div id="header">
+                  <p>Dear ${order.firstName}</p>
+                  <p>Thank you for becoming a Party Patron. Your support means so much to us. And welcome to the PartyWith family!</p>
+                </div>
                 <div id="body">
                   <p>Your perks:
                     <ul>
@@ -141,7 +144,10 @@ app.all('/webhook', function(req, res){
             subject: 'You’re now a 💎 Super Patron 💎', // Subject line
             text: req.body.text, // plaintext body
               html: `
-                <div id="header">Thank you for becoming a Super Patron. Your support means so much to us. And welcome to the PartyWith family!</div>
+                <div id="header">
+                  <p>Dear ${order.firstName}</p>
+                  <p>Thank you for becoming a Super Patron. Your support means so much to us. And welcome to the PartyWith family!</p>
+                </div>
                 <div id="body">
                   <p>Your perks:
                     <ul>
