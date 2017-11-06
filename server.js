@@ -31,7 +31,15 @@ app.set('view engine', 'pug');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(session({secret: 'super secret',saveUninitialized: false, resave: true}));
+app.use(session({
+   cookieName: 'sessionName',
+   secret: "notagoodsecretnoreallydontusethisone",
+   resave: false,
+   saveUninitialized: true,
+   httpOnly: true,  // dont let browser javascript access cookie ever
+   secure: true, // only use cookie over https
+   ephemeral: true // delete this cookie while browser close
+}));
 
 app.get('/', function(req, res) {
   res.render('index');
@@ -55,6 +63,8 @@ app.all("/checkout", function (req, res) {
 });
 
 app.all('/patron', function(req, res){
+  
+  var sess = req.session;
   var amount;
   var name;
   var type;
@@ -67,7 +77,7 @@ app.all('/patron', function(req, res){
     type = 'party';
     amount = 25.00
   }
-  
+
   mollie.payments.create({
     amount:      amount,
     description: `${name}: ${req.body.firstName} ${req.body.lastName} ${req.body.email}`,
@@ -85,6 +95,7 @@ app.all('/patron', function(req, res){
           amount: amount,
           order: payment
         }
+        sess.paymentId = payment.id;   
         Order.create(newOrder, function(err, order){
           if(err) {
             console.log(err)
@@ -118,10 +129,6 @@ app.all('/webhook', function(req, res){
         if(err) {
           console.log(err);
         } else {
-          console.log("Payment Status: " + payment.status);
-          order["order"]["status"] = payment.status;
-          console.log("Order Status: " + order.order.status);
-          // order.save();
           // CONFIRMATION EMAIL
           var mailOptionsParty = {
             from: '"'+ "Dan @ PartyWith" +'" <'+process.env.TEST_SENDER+'>', // sender address
@@ -222,14 +229,20 @@ app.all('/webhook', function(req, res){
 
 app.get('/order/:orderid', function(req, res) {
   mollie.payments.get(req.params.orderid, function(payment) {
-    // console.log(payment)
     res.render('order', {order: payment}); 
   });
 });
 
 app.all('/thanks', function(req, res){
-  var paymentId = req.body.id; 
-  res.render('thanks');
+  var paymentId = req.session.paymentId; 
+  Order.findOne({orderId: paymentId}, function(err, order) {
+    if (err) {
+      console.log(err);
+      res.render('payment-error', { payment: order.order });
+    }else {
+      res.render('executed-payment', { payment: order.order });
+    }
+  });
 });
 
 // listen for requests :)

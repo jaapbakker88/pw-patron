@@ -1,12 +1,20 @@
 extends layout
 
 block content
-	.container
-		h3 Payment Status
-		p Your payment with iDeal was:
-
-		p= payment.status
-		
-		p You purchased an #{payment.description} for #{payment.amount}
-
-		a(href='/').btn.btn-primary Back to store
+  #logo
+    #logo-retina 
+      img(src="https://cdn.glitch.com/b2a03dab-a7cf-4d7e-b681-64f1ed6953ee%2Flogo.png?1509531112854")
+  #container
+    #header
+      #header-info(style="width:100%; max-width: 100%; text-align:center;") Payment Status
+    #body
+      #form-fields
+        p(style="text-align: center;") Your payment with iDeal was:
+        p(style="text-align: center; color: green; font-size: 22px; font-weight: bold; text-transform: uppercase;")= payment.status
+        hr
+        p(style="text-align: center;") You purchased:
+        br
+        p #{payment.description} for #{payment.amount}
+        br
+        div#submit-grid(style="text-align: center;")
+          a#submit(href='/').btn.btn-primary Back to store
