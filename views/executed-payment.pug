@@ -10,11 +10,15 @@ block content
     #body
       #form-fields
         p(style="text-align: center;") Your payment with iDeal was:
-        p(style="text-align: center; color: green; font-size: 22px; font-weight: bold; text-transform: uppercase;")= payment.status
-        hr
-        p(style="text-align: center;") You purchased:
-        br
-        p #{payment.description} for #{payment.amount}
-        br
+        if(payment.status === 'paid')
+          p(style="text-align: center; color: green; font-size: 22px; font-weight: bold; text-transform: uppercase;")= payment.status 
+          hr
+          p(style="text-align: center;") You purchased:
+          br
+          p #{payment.description} for #{payment.amount}
+          br
+        else
+          p(style="text-align: center; color: red; font-size: 22px; font-weight: bold; text-transform: uppercase;")= payment.status
+          
         div#submit-grid(style="text-align: center;")
           a#submit(href='/').btn.btn-primary Back to store
