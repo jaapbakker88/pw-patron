@@ -58,11 +58,7 @@ app.all("/checkout", function (req, res) {
   var amount;
   var name;
   var type;
-  if (req.body.item === 'super'){
-    name = 'Super Patron';
-    type = 'super';
-    amount = 50.00;
-  } else if(req.body.item === 'champion') {
+  if(req.body.item === 'champion') {
       name = 'Party Champion: (1 year)';
       type = 'champion';
       amount = 20.00;    
@@ -70,11 +66,7 @@ app.all("/checkout", function (req, res) {
       name = 'Party Champion (lifetime!)';
       type = 'champion';
       amount = 50.00;    
-  } else {
-    name = 'Party Patron';
-    type = 'party';
-    amount = 25.00
-  }
+  } 
   res.render('checkout', {name: name, amount: amount, type:type});
 });
 
