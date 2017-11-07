@@ -163,7 +163,7 @@ app.all('/webhook', function(req, res){
                 <div id="footer"><p><small>This is an automatically generated email</small></p></div>
               `
           };
-          
+
           transporter.sendMail(mailOptions, function(error, info){
               if(error){
                   return console.log(error);
