@@ -161,40 +161,9 @@ app.all('/webhook', function(req, res){
                   Dan</p>
                 </div>
                 <div id="footer"><p><small>This is an automatically generated email</small></p></div>
-              ` // html body
-                // <p><b><a href="${process.env.BASEURL}/order/${order.orderId}">${process.env.BASEURL}/order/${order.orderId}</a></b></p>
+              `
           };
-          // var mailOptionsSuper = {
-          //   from: '"'+ "Dan @ PartyWith" +'" <'+process.env.TEST_SENDER+'>', // sender address
-          //   to: order.email, // list of receivers
-          //   subject: 'You’re now a Party Champion', // Subject line
-          //   text: req.body.text, // plaintext body
-          //     html: `
-          //       <div id="header">
-          //         <p>Dear ${order.firstName},</p>
-          //         <p>Thank you for becoming a Super Patron. Your support means so much to us. And welcome to the PartyWith family!</p>
-          //       </div>
-          //       <div id="body">
-          //         <p>Your perks:
-          //           <ul>
-          //             <li><strong>1 year subscription of Globetrotter:</strong> This is currently a free feature that becomes paid on iOS starting 17 Nov 2017. You can continue to chat with anyone and join any event on the app, no matter where they are.</li>
-          //             <li><strong>1 featured event per month:</strong> Just email us at info@partywith.co with the title of the event you wish to feature (it can be any event on the app).</li>
-          //             <li><strong>A shiny badge:</strong> Your badge will be proudly displayed on your profile starting 17 Nov 2017.</li>
-          //           </ul>
-          //         </p>
-          //         <p>Should you have any questions about your perks or feedback about the app, you have a direct line to me - please reach out any time.</p>
-          //         <p>Cheers,<br>
-          //         Dan</p>
-          //       </div>
-          //       <div id="footer"><p><small>This is an automatically generated email</small></p></div>
-          //     ` 
-          // };
-          // if(order.orderType === 'championl') {
-          //   var mailOptions = mailOptionsSuper;
-          // } else {
-          //   var mailOptions = mailOptionsParty;
-          // }
-          // send mail with defined transport object
+          
           transporter.sendMail(mailOptions, function(error, info){
               if(error){
                   return console.log(error);
