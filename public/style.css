@@ -13,7 +13,7 @@ html{
   height: 100%;
 }
 body {
-  background: url('https://cdn.glitch.com/b2a03dab-a7cf-4d7e-b681-64f1ed6953ee%2Fanthony-delanoix-15928.jpg?1509530118228');
+  background: url('/assets/images/background.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
