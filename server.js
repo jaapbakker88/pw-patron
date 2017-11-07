@@ -146,23 +146,21 @@ app.all('/webhook', function(req, res){
           var mailOptions = {
             from: '"'+ "Dan @ PartyWith" +'" <'+process.env.TEST_SENDER+'>', // sender address
             to: order.email, // list of receivers
-            subject: 'You’re now a Party Champion', // Subject line
+            subject: 'You’re now a Champion 🏆', // Subject line
             text: req.body.text, // plaintext body
               html: `
                 <div id="header">
                   <p>Dear ${order.firstName},</p>
-                  <p>Thank you for becoming a ${order.orderName}. Your support means so much to us. And welcome to the PartyWith family!</p>
+                  <p>Thank you for becoming a ${order.orderName}, a verified member of the PartyWith app. Your support means so much to us. And welcome to the PartyWith family!!</p>
                 </div>
                 <div id="body">
                   <p>Your perks:
                     <ul>
-                      <li>Champions are a way that PartyWith generates revenue in order to keep the app running. By becoming a Champion, you're supporting our continued development and growth. Champions are our heroes! </li>
-                      <li>Champions get a direct line of communication with the PartyWith team - you’ll be the first to see and hear about new features we’re building. You have a real say in the direction of the app.</li>
-                      <li>Champions get a shiny trophy displayed on their profiles in the app. This shows that you support us and our mission! 🏆</li>
-                      <li><em>Party Champions are eligible to earn ‘Party Points’ to spend on real party perks (launching soon).</em></li>
+                      <li><strong>A shiny badge:</strong> Your badge will be proudly displayed on your profile starting 28 Nov 2017, for one year.</li>
+                      <li><strong>A direct line of communication</strong> with the PartyWith team: Feel free to reach out to me anytime about the app, and I’ll keep you in the loop on the app’s latest updates as well.</li>
+                      <li><strong>Party points</strong>: Will be launched once we reach 100 champions on the app. Stay tuned.</li>
                     </ul>
                   </p>
-                  <p>Should you have any questions about your perks or feedback about the app, you have a direct line to me - please reach out any time.</p>
                   <p>Cheers,<br>
                   Dan</p>
                 </div>
