@@ -13,10 +13,7 @@ block content
         if(payment.status === 'paid')
           p(style="text-align: center; color: green; font-size: 22px; font-weight: bold; text-transform: uppercase;")= payment.status 
           hr
-          p(style="text-align: center;") You purchased:
-          br
-          p #{payment.description} for #{payment.amount}
-          br
+          p Check your email for more info, Patron!
         else
           p(style="text-align: center; color: red; font-size: 22px; font-weight: bold; text-transform: uppercase;")= payment.status
           

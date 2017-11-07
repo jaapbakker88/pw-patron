@@ -10,7 +10,7 @@
   box-sizing: border-box;
 }
 html{
-  height: 100%%;
+  height: 100%;
 }
 body {
   background: url('https://cdn.glitch.com/b2a03dab-a7cf-4d7e-b681-64f1ed6953ee%2Fanthony-delanoix-15928.jpg?1509530118228');
@@ -32,6 +32,12 @@ background: -webkit-linear-gradient(top, rgba(0,0,0,0.4) 0%,rgba(0,0,0,0.4) 43%,
 background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%,rgba(0,0,0,0.4) 43%,rgba(0,0,0,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 }
+
+body.modal-open {
+    overflow: hidden;
+
+}
+
 .is-hero-text {
   color: #fff;
 }
@@ -133,7 +139,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', e
 }
 
 .option {
-  background: #fff;
+  background: rgba(255,255,255,0.8);
   border-radius: 6px;
   -webkit-box-shadow: 0 5px 20px rgba(0,0,0,.1), 0 5px 10px rgba(0,0,0,.1);
   box-shadow: 0 5px 20px rgba(0,0,0,.1), 0 5px 10px rgba(0,0,0,.1);
@@ -148,30 +154,37 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', e
 }
 
 .option footer {
-  border-top: 1px solid #f2f0ed;
-  padding: 5px;  
-}
-.option footer button {
-  border-radius:0 ;
-  width: 100%;
   height: 75px;
+  border-top: 1px solid #f2f0ed;
+}
+
+.option footer .item12 {
+  width: 50%;
+  float: left;
+  padding: 5px;
+  height: 100%;
+}
+
+.option footer .item12:first-child {
+  border-right: 1px solid #f2f0ed;
+}
+.option footer .item12 form button {
+  width: 100%;
+  height: 100%;
+  background: #fff;
   border: none;
-  font-size: 22px;
-  border-color: transparent;
-  background: #30baed;
-  color: white;
-  border-radius: 0px 0px 4px 4px;
+  font-size: 18px;
+  font-weight: 700;
   cursor: pointer;
 }
-.option footer form {margin-bottom: 0;}
-
-.option footer button:hover {
-  background: rgba(0,149,255,.06);
-  color: black;
+.option footer .item12 form button:hover {
+  background: #30baed;
+  color: #fff;
 }
+  
 
 .option .body {
-  padding: 1em 2em 5em;
+  padding: 1em 2em 6em;
 }
 .option .body img {
   display: block;
@@ -202,7 +215,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', e
   height: 100%;
 }
 
+.screenshot {
+  max-width: 300px;
+  height: auto;
+}
 
+.modal-button-box {
+  position: absolute;
+  min-width: 150px;
+  top: 5px;
+  right: 5px;
+}
+.modal-button {
+  width: 100%;
+}
  
 @media screen and (max-width: 767px) {
     .options {margin-top: 2em;}

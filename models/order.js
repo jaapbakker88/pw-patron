@@ -7,6 +7,7 @@ var orderSchema = new mongoose.Schema({
   email: String,
   orderId: String,
   orderType: String,
+  orderName: String,
   amount: Number,
   comment: String,
   order: Object
