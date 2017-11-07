@@ -38,6 +38,10 @@ body.modal-open {
 
 }
 
+a {
+  color: #30baed;
+}
+
 .is-hero-text {
   color: #fff;
 }
@@ -227,7 +231,14 @@ body.modal-open {
   right: 5px;
 }
 .modal-button {
-  width: 100%;
+/*  background-color: #30baed;
+*/  width: 100%;
+}
+
+.as-seen-in img{
+  display: block;
+  margin: auto;
+  max-width: 100px;
 }
  
 @media screen and (max-width: 767px) {

@@ -45,6 +45,10 @@ app.get('/', function(req, res) {
   res.render('champion');
 });
 
+app.get('/invest', function(req, res) {
+  res.render('invest');
+});
+
 app.get('/champion', function(req, res) {
   res.render('champion')
 });

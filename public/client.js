@@ -5,7 +5,6 @@ $('.modal-button').on('click', function(e){
 });
 
 $('.modal-close').on('click', closeModal);
-
 $('.modal-background').on('click', closeModal);
 
 function closeModal(e){
