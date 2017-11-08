@@ -120,15 +120,13 @@ app.all('/patron', function(req, res){
 app.all('/webhook', function(req, res){
   var paymentId = req.body.id;  
   mollie.payments.get(paymentId, function(payment) {
-    if (payment.error || payment.status === "expired" || payment.status === "cancelled") {   
+    if (payment.error || payment.status === "expired" || payment.status === "cancelled" || payment.status === "refunded") {   
       res.send('Something went wrong!');
       Order.findOneAndUpdate({orderId: payment.id}, {$set:{order: payment }}, {new: true}, function(err, order) {
         if(err) {
           console.log(err);
-          payment.redirectUrl = process.env.BASEURL;
           res.send(payment.error);
         } else {
-          payment.redirectUrl = process.env.BASEURL;
           res.send(payment.error);
         }
       });
