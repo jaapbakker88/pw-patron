@@ -215,10 +215,10 @@ app.get('/order/:orderid', function(req, res) {
 app.get('/thanks', function(req, res){
   var paymentId = req.session.paymentId; 
   Order.findOne({orderId: paymentId}, function(err, order) {
-    if (err) {
+    if (err || order === null) {
       console.log(err);
-      res.render('payment-error', { payment: order.order });
-    }else {
+      res.redirect('/');
+    } else {
       res.render('executed-payment', { payment: order.order });
     }
   });
