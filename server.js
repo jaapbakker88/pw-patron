@@ -198,9 +198,8 @@ app.all('/webhook', function(req, res){
           });
           
         }
-      })
+      });
       res.status(200).send('Success!!');
-      // res.render('executed-payment', { 'payment': payment });
     }
   });
 });
