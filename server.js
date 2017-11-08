@@ -11,6 +11,7 @@ var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport('smtps://'+process.env.SMTP_LOGIN+':'+process.env.SMTP_PASSW+'@smtp.mailgun.org');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var cookieParser = require('cookie-parser');
 
 
@@ -33,6 +34,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(session({
    cookieName: 'sessionName',
+   store: new MongoStore({ mongooseConnection: mongoose.connection }),
    secret: "notagoodsecretnoreallydontusethisone",
    resave: false,
    saveUninitialized: true,
@@ -210,7 +212,7 @@ app.get('/order/:orderid', function(req, res) {
   });
 });
 
-app.all('/thanks', function(req, res){
+app.get('/thanks', function(req, res){
   var paymentId = req.session.paymentId; 
   Order.findOne({orderId: paymentId}, function(err, order) {
     if (err) {
