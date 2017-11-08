@@ -11,6 +11,7 @@ var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport('smtps://'+process.env.SMTP_LOGIN+':'+process.env.SMTP_PASSW+'@smtp.mailgun.org');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var cookieParser = require('cookie-parser');
 
 
@@ -33,6 +34,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(session({
    cookieName: 'sessionName',
+   store: new MongoStore({ mongooseConnection: mongoose.connection }),
    secret: "notagoodsecretnoreallydontusethisone",
    resave: false,
    saveUninitialized: true,
@@ -45,6 +47,10 @@ app.get('/', function(req, res) {
   res.render('champion');
 });
 
+app.get('/invest', function(req, res) {
+  res.render('invest');
+});
+
 app.get('/champion', function(req, res) {
   res.render('champion')
 });
@@ -54,23 +60,15 @@ app.all("/checkout", function (req, res) {
   var amount;
   var name;
   var type;
-  if (req.body.item === 'super'){
-    name = 'Super Patron';
-    type = 'super';
-    amount = 50.00;
-  } else if(req.body.item === 'champion') {
+  if(req.body.item === 'champion') {
       name = 'Party Champion: (1 year)';
       type = 'champion';
       amount = 20.00;    
   } else if(req.body.item === 'championl') {
       name = 'Party Champion (lifetime!)';
-      type = 'champion';
+      type = 'championl';
       amount = 50.00;    
-  } else {
-    name = 'Party Patron';
-    type = 'party';
-    amount = 25.00
-  }
+  } 
   res.render('checkout', {name: name, amount: amount, type:type});
 });
 
@@ -86,7 +84,7 @@ app.all('/patron', function(req, res){
       amount = 20.00;    
   } else if(req.body.item === 'championl') {
       name = 'Party Champion (lifetime!)';
-      type = 'champion';
+      type = 'championl';
       amount = 50.00;    
   }
 
@@ -124,15 +122,13 @@ app.all('/patron', function(req, res){
 app.all('/webhook', function(req, res){
   var paymentId = req.body.id;  
   mollie.payments.get(paymentId, function(payment) {
-    if (payment.error || payment.status === "expired" || payment.status === "cancelled") {   
+    if (payment.error || payment.status === "expired" || payment.status === "cancelled" || payment.status === "refunded") {   
       res.send('Something went wrong!');
       Order.findOneAndUpdate({orderId: payment.id}, {$set:{order: payment }}, {new: true}, function(err, order) {
         if(err) {
           console.log(err);
-          payment.redirectUrl = process.env.BASEURL;
           res.send(payment.error);
         } else {
-          payment.redirectUrl = process.env.BASEURL;
           res.send(payment.error);
         }
       });
@@ -146,61 +142,28 @@ app.all('/webhook', function(req, res){
           var mailOptions = {
             from: '"'+ "Dan @ PartyWith" +'" <'+process.env.TEST_SENDER+'>', // sender address
             to: order.email, // list of receivers
-            subject: 'You’re now a Party Champion', // Subject line
+            subject: 'You’re now a Champion 🏆', // Subject line
             text: req.body.text, // plaintext body
               html: `
                 <div id="header">
                   <p>Dear ${order.firstName},</p>
-                  <p>Thank you for becoming a ${order.orderName}. Your support means so much to us. And welcome to the PartyWith family!</p>
+                  <p>Thank you for becoming a ${order.orderName}, a verified member of the PartyWith app. Your support means so much to us. And welcome to the PartyWith family!!</p>
                 </div>
                 <div id="body">
                   <p>Your perks:
                     <ul>
-                      <li>Champions are a way that PartyWith generates revenue in order to keep the app running. By becoming a Champion, you're supporting our continued development and growth. Champions are our heroes! </li>
-                      <li>Champions get a direct line of communication with the PartyWith team - you’ll be the first to see and hear about new features we’re building. You have a real say in the direction of the app.</li>
-                      <li>Champions get a shiny trophy displayed on their profiles in the app. This shows that you support us and our mission! 🏆</li>
-                      <li><em>Party Champions are eligible to earn ‘Party Points’ to spend on real party perks (launching soon).</em></li>
+                      <li><strong>A shiny badge:</strong> Your badge will be proudly displayed on your profile starting 28 Nov 2017, for one year.</li>
+                      <li><strong>A direct line of communication</strong> with the PartyWith team: Feel free to reach out to me anytime about the app, and I’ll keep you in the loop on the app’s latest updates as well.</li>
+                      <li><strong>Party points</strong>: Will be launched once we reach 100 champions on the app. Stay tuned.</li>
                     </ul>
                   </p>
-                  <p>Should you have any questions about your perks or feedback about the app, you have a direct line to me - please reach out any time.</p>
                   <p>Cheers,<br>
                   Dan</p>
                 </div>
                 <div id="footer"><p><small>This is an automatically generated email</small></p></div>
-              ` // html body
-                // <p><b><a href="${process.env.BASEURL}/order/${order.orderId}">${process.env.BASEURL}/order/${order.orderId}</a></b></p>
+              `
           };
-          // var mailOptionsSuper = {
-          //   from: '"'+ "Dan @ PartyWith" +'" <'+process.env.TEST_SENDER+'>', // sender address
-          //   to: order.email, // list of receivers
-          //   subject: 'You’re now a Party Champion', // Subject line
-          //   text: req.body.text, // plaintext body
-          //     html: `
-          //       <div id="header">
-          //         <p>Dear ${order.firstName},</p>
-          //         <p>Thank you for becoming a Super Patron. Your support means so much to us. And welcome to the PartyWith family!</p>
-          //       </div>
-          //       <div id="body">
-          //         <p>Your perks:
-          //           <ul>
-          //             <li><strong>1 year subscription of Globetrotter:</strong> This is currently a free feature that becomes paid on iOS starting 17 Nov 2017. You can continue to chat with anyone and join any event on the app, no matter where they are.</li>
-          //             <li><strong>1 featured event per month:</strong> Just email us at info@partywith.co with the title of the event you wish to feature (it can be any event on the app).</li>
-          //             <li><strong>A shiny badge:</strong> Your badge will be proudly displayed on your profile starting 17 Nov 2017.</li>
-          //           </ul>
-          //         </p>
-          //         <p>Should you have any questions about your perks or feedback about the app, you have a direct line to me - please reach out any time.</p>
-          //         <p>Cheers,<br>
-          //         Dan</p>
-          //       </div>
-          //       <div id="footer"><p><small>This is an automatically generated email</small></p></div>
-          //     ` 
-          // };
-          // if(order.orderType === 'championl') {
-          //   var mailOptions = mailOptionsSuper;
-          // } else {
-          //   var mailOptions = mailOptionsParty;
-          // }
-          // send mail with defined transport object
+
           transporter.sendMail(mailOptions, function(error, info){
               if(error){
                   return console.log(error);
@@ -249,7 +212,7 @@ app.get('/order/:orderid', function(req, res) {
   });
 });
 
-app.all('/thanks', function(req, res){
+app.get('/thanks', function(req, res){
   var paymentId = req.session.paymentId; 
   Order.findOne({orderId: paymentId}, function(err, order) {
     if (err) {

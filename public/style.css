@@ -13,7 +13,7 @@ html{
   height: 100%;
 }
 body {
-  background: url('https://cdn.glitch.com/b2a03dab-a7cf-4d7e-b681-64f1ed6953ee%2Fanthony-delanoix-15928.jpg?1509530118228');
+  background: url('/assets/images/background.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -36,6 +36,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', e
 body.modal-open {
     overflow: hidden;
 
+}
+
+a {
+  color: #30baed;
 }
 
 .is-hero-text {
@@ -218,6 +222,8 @@ body.modal-open {
 .screenshot {
   max-width: 300px;
   height: auto;
+  display: block;
+  margin: 0 auto; 
 }
 
 .modal-button-box {
@@ -227,7 +233,14 @@ body.modal-open {
   right: 5px;
 }
 .modal-button {
-  width: 100%;
+/*  background-color: #30baed;
+*/  width: 100%;
+}
+
+.as-seen-in img{
+  display: block;
+  margin: auto;
+  max-width: 100px;
 }
  
 @media screen and (max-width: 767px) {

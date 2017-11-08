@@ -4,14 +4,14 @@ block content
   
   #logo
     #logo-retina 
-      img(src="https://cdn.glitch.com/b2a03dab-a7cf-4d7e-b681-64f1ed6953ee%2Flogo.png?1509531112854")
+      img(src="/assets/images/logo.png")
   #container
     #header
       #header-info(style="width:100%; max-width: 100%; text-align:center;") Thanks, your support means a lot!
     
     #body
-      #form-fields
-        p(style="text-align: center;") Check your email for more info, Patron!
+      #form-fields.has-text-centered
+        p(style="text-align: center;") Check your email for more info, Champion!
         
-        p
+        p.has-text-centered
           a(href=`/order/${paymentId}`) View your order
