@@ -39,8 +39,7 @@ app.use(session({
    resave: false,
    saveUninitialized: true,
    httpOnly: true,  // dont let browser javascript access cookie ever
-   secure: true, // only use cookie over https
-   ephemeral: true // delete this cookie while browser close
+   secure: true
 }));
 
 app.get('/', function(req, res) {
@@ -216,7 +215,7 @@ app.get('/thanks', function(req, res){
   var paymentId = req.session.paymentId; 
   Order.findOne({orderId: paymentId}, function(err, order) {
     if (err || order === null) {
-      console.log(err);
+      console.log('Order not found!');
       res.redirect('/');
     } else {
       res.render('executed-payment', { payment: order.order });
