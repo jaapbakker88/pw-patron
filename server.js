@@ -39,7 +39,8 @@ app.use(session({
    resave: false,
    saveUninitialized: true,
    httpOnly: true,  // dont let browser javascript access cookie ever
-   secure: true
+   secure: true,
+   cookie: { secure: true }
 }));
 
 app.get('/', function(req, res) {
@@ -167,7 +168,7 @@ app.all('/webhook', function(req, res){
               if(error){
                   return console.log(error);
               }
-              console.log('Message sent: ' + info.response);
+              console.log('Message (user) sent: ' + info.response);
           });
           
           // ADMIN EMAIL
@@ -194,30 +195,31 @@ app.all('/webhook', function(req, res){
               if(error){
                   return console.log(error);
               }
-              console.log('Message sent: ' + info.response);
+              console.log('Message (admin) sent: ' + info.response);
           });
-          
+          res.status(200).send('Success!!');
         }
       });
-      res.status(200).send('Success!!');
     }
   });
 });
 
 app.get('/order/:orderid', function(req, res) {
   mollie.payments.get(req.params.orderid, function(payment) {
-    res.render('order', {order: payment}); 
+    res.render('executed-payment', { payment: payment }); 
   });
 });
 
 app.get('/thanks', function(req, res){
-  var paymentId = req.session.paymentId; 
+  var paymentId = req.session.paymentId;
+  console.log('User landed on thanks route with order number: ' + paymentId)
   Order.findOne({orderId: paymentId}, function(err, order) {
     if (err || order === null) {
-      console.log('Order not found!');
+      console.log('Order not found! User redirected to homepage!');
       res.redirect('/');
     } else {
-      res.render('executed-payment', { payment: order.order });
+      console.log('Order found and user succesfully redirected!')
+      res.redirect(`/order/${paymentId}`);
     }
   });
 });
