@@ -33,7 +33,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(session({
-   cookieName: 'sessionName',
    store: new MongoStore({ mongooseConnection: mongoose.connection }),
    secret: "notagoodsecretnoreallydontusethisone",
    resave: false,
