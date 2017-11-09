@@ -38,7 +38,7 @@ app.use(session({
    resave: false,
    saveUninitialized: true,
    httpOnly: true,  // dont let browser javascript access cookie ever
-   cookie: { secure: true }
+   // cookie: { secure: true }
 }));
 
 app.get('/', function(req, res) {
