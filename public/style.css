@@ -42,6 +42,10 @@ a {
   color: #30baed;
 }
 
+.green {
+  color:green; font-weight: 700;
+}
+
 .is-hero-text {
   color: #fff;
 }

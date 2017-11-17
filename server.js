@@ -11,6 +11,7 @@ var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport('smtps://'+process.env.SMTP_LOGIN+':'+process.env.SMTP_PASSW+'@smtp.mailgun.org');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var Customer = require('./models/customer');
 var MongoStore = require('connect-mongo')(session);
 var cookieParser = require('cookie-parser');
 
@@ -29,17 +30,17 @@ mollie.setApiKey(process.env.MOLLIE_API_KEY);
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 app.set('view engine', 'pug');
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
 app.use(session({
    store: new MongoStore({ mongooseConnection: mongoose.connection }),
    secret: "notagoodsecretnoreallydontusethisone",
    resave: false,
    saveUninitialized: true,
    httpOnly: true,  // dont let browser javascript access cookie ever
-   // cookie: { secure: true }
+   cookie: { secure: false , maxAge: 900000 } 
 }));
+
+
 
 app.get('/', function(req, res) {
   res.render('champion');
@@ -49,9 +50,8 @@ app.get('/invest', function(req, res) {
   res.render('invest');
 });
 
-app.get('/champion', function(req, res) {
-  res.render('champion')
-});
+var subscriptionRouter = require('./router/subscription');
+app.use('/subscription', subscriptionRouter);
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.all("/checkout", function (req, res) {
@@ -70,52 +70,6 @@ app.all("/checkout", function (req, res) {
   res.render('checkout', {name: name, amount: amount, type:type});
 });
 
-app.all('/patron', function(req, res){
-  
-  var sess = req.session;
-  var amount;
-  var name;
-  var type;
-  if(req.body.item === 'champion') {
-      name = 'Party Champion: (1 year)';
-      type = 'champion';
-      amount = 20.00;    
-  } else if(req.body.item === 'championl') {
-      name = 'Party Champion (lifetime!)';
-      type = 'championl';
-      amount = 50.00;    
-  }
-
-  mollie.payments.create({
-    amount:      amount,
-    description: `${name}`,
-    redirectUrl: process.env.BASEURL + "/thanks",
-    webhookUrl:  process.env.BASEURL + "/webhook"
-    }, function (payment) {
-        res.writeHead(302, { Location: payment.getPaymentUrl() })
-        var newOrder = {
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          email: req.body.email,
-          comment: req.body.comment,
-          orderId: payment.id,
-          orderType: type,
-          orderName: name,
-          amount: amount,
-          order: payment
-        }
-        sess.paymentId = payment.id;   
-        Order.create(newOrder, function(err, order){
-          if(err) {
-            console.log(err)
-          } else {
-            res.end();
-          }
-        });    
-        res.end();
-    });
-   
-});
 
 app.all('/webhook', function(req, res){
   var paymentId = req.body.id;  
@@ -126,11 +80,8 @@ app.all('/webhook', function(req, res){
         if(err) {
           console.log(err);
           res.send(payment.error);
-        } else {
-          res.send(payment.error);
-        }
+        } 
       });
-      // res.render('payment-error', { 'error': payment.error });
     }else {
       Order.findOneAndUpdate({orderId: payment.id}, {$set:{order: payment }}, {new: true}, function(err, order) {
         if(err) {
