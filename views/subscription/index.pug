@@ -11,11 +11,11 @@ block content
     form#body(action="/subscription/create" method="post")
       #form-fields
         .field
-          input.input(type="text" name="firstName" placeholder="First Name")
+          input.input(type="text" name="firstName" placeholder="First Name" required)
         .field
-          input.input(type="text" name="lastName" placeholder="Last Name")
+          input.input(type="text" name="lastName" placeholder="Last Name" required)
         .field
-          input.input(type="text" name="email" placeholder="Email address")
+          input.input(type="text" name="email" placeholder="Email address" required)
         p.has-text-centered
           small We'll charge you €0.01 to confirm the subscription. The actual first payment will be made within a couple of days. You can cancel your subscription at any given time.
       #submit-grid

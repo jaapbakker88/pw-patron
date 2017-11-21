@@ -5,6 +5,7 @@ var customerSchema = new mongoose.Schema({
   firstName: String,
   lastName: String,
   email: String,
+  userId: String,
   customerId: String,
   subscription: Object,
   payments: Array

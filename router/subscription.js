@@ -11,6 +11,9 @@ var transporter = nodemailer.createTransport('smtps://'+process.env.SMTP_LOGIN+'
 var mollie = new Mollie.API.Client;
 mollie.setApiKey(process.env.MOLLIE_API_KEY);
 
+var mongoose  = require('mongoose');
+mongoose.Promise = global.Promise;
+
 router.get('/', function(req, res) {
   res.render('subscription/index');
 });
@@ -26,7 +29,7 @@ router.all('/create', function(req, res) {
         if (err) {
           console.log(err);
         } else {
-          console.log('Customer ' + createdCustomer.firstName + ' ' + createdCustomer.lastName + 'saved to database!')
+          console.log('Customer ' + createdCustomer.firstName + ' ' + createdCustomer.lastName + ' saved to database!')
           mollie.payments.create({
               amount:        0.01,               // 1 cent or higher
               customerId:    createdCustomer.customerId,
@@ -36,14 +39,11 @@ router.all('/create', function(req, res) {
               webhookUrl:    process.env.BASEURL + '/subscription/webhook' // optional
           },  function (payment) {
               console.log('Payment ' + payment.id + ' created in Mollie!')
+              
+              // CREATE PAYMENT IN DATABASE
               paymentControl.createPayment(payment.id, payment);
-              // Payment.create({orderId: payment.id, order: payment}, function(err, savedPayment){
-              //   if(err) {
-              //     console.log(err)
-              //   } else {
-              //     console.log('payment saved!')
-              //   }
-              // });
+              
+
               req.session.paymentId = payment.id;
               createdCustomer.payments.push(payment.id);
               createdCustomer.save();
@@ -65,32 +65,10 @@ router.all('/webhook', function(req, res) {
       res.send('Something went wrong!');
       // If payment is found and either expired, canceled or refunded save updated version to DB
       paymentControl.updatePayment(payment.id, payment);
-      // Payment.findOneAndUpdate({orderId: payment.id}, {$set:{order: payment }}, {new: true}, function(err, savedPayment) {
-      //   if(err) {
-      //     console.log(err);
-      //     res.send(savedPayment.error);
-      //   } 
-      // });
+
     } else {
       // Else payment is found and paid, save updated version to DB
-      Payment.findOneAndUpdate({orderId: payment.id}, {$set:{order: payment }}, {new: true}, function(err, savedPayment) {
-        console.log('payment 123: ' + payment);
-        if(err) {
-          console.log(err);
-          res.send(savedPayment.error);
-        } else if (!savedPayment) {
-          // If no payments: create a new payment
-          paymentControl.updatePayment(payment.id, payment);
-          // Payment.create({orderId: payment.id, order: payment}, function(err, newPayment){
-          //   if(err) {
-          //     console.log(err)
-          //   } else {
-          //     console.log('payment saved!')
-          //   }
-          // });
-        }
-          
-      });
+      paymentControl.updatePayment(payment.id, payment);
       
       // If payment has no subscription yet, create subscription and add to customer
       if (payment.subscriptionId === undefined) {
