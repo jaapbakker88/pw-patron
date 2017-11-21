@@ -15,7 +15,7 @@ var mongoose  = require('mongoose');
 mongoose.Promise = global.Promise;
 
 router.get('/', function(req, res) {
-  res.render('subscription/index', {userId: req.param('id')});
+  res.render('subscription/index', {userId: req.query.id});
 });
 
 router.all('/create', function(req, res) {
