@@ -24,7 +24,7 @@ exports.createPayment = function(paymentId, newPaymentObj){
               console.log('Error in paymentControl.updatePayment | 2');
             } else {
               mailControl.sendMail("confirmation", customer.email, newPaymentObj, customer);
-              // mailControl.sendAdminMail("adminEmail", process.env.TEST_RECIPIENT, newPaymentObj, customer);
+              mailControl.sendAdminMail("adminEmail", process.env.TEST_RECIPIENT, newPaymentObj, customer);
             }
           });
         }
@@ -47,6 +47,7 @@ exports.updatePayment = function(paymentId, newPaymentObj){
             console.log('Error in paymentControl.updatePayment | 2');
           } else {
             mailControl.sendMail("confirmation", customer.email, newPaymentObj, customer);
+            mailControl.sendAdminMail("adminEmail", process.env.TEST_RECIPIENT, newPaymentObj, customer);
           }
         });
         

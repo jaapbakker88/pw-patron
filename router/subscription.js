@@ -15,7 +15,7 @@ var mongoose  = require('mongoose');
 mongoose.Promise = global.Promise;
 
 router.get('/', function(req, res) {
-  res.render('subscription/index');
+  res.render('subscription/index', {userId: req.param('id')});
 });
 
 router.all('/create', function(req, res) {
@@ -23,7 +23,7 @@ router.all('/create', function(req, res) {
     name:  `${req.body.firstName} ${req.body.lastName}`,
     email: `${req.body.email}`
   },  function (customer) {
-      var newCustomer = {firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, customerId: customer.id};
+      var newCustomer = {firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, userId: req.body.userId, customerId: customer.id};
       Customer.create(newCustomer, function(err, createdCustomer){
         req.session.customerId = customer.id;
         if (err) {
@@ -118,10 +118,10 @@ router.all('/webhook', function(req, res) {
 
 router.get('/i/:customer', function(req, res){
   Customer.findOne({customerId: req.params.customer}, function(err, customer){
-      if(err){
+      if(err ){
         console.log(err);
       } else {
-                        
+                    
         res.render('subscription/subscription', {customer: customer})
       }
   });
@@ -129,7 +129,16 @@ router.get('/i/:customer', function(req, res){
 });
 
 router.get('/endpoint', function(req, res){
-   res.redirect('/subscription/i/' + req.session.customerId)
+  
+  Payment.findOne({orderId: req.session.paymentId}, function(err, payment){
+    if(payment.order.status === 'cancelled') {
+      console.log('Notice: payment with ' + req.session.paymentId + ' was canceled.')
+      res.redirect('/subscription');
+    } else {
+      res.redirect('/subscription/i/' + req.session.customerId)
+    }
+  })
+
 });
 
 router.get('/cancel/:customerId/:subscriptionId', function(req, res){

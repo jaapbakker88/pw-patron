@@ -11,24 +11,31 @@ block content
       #form-fields
         table.table
           tr
-            td Name
+            td 
+              strong Name
             td= customer.firstName + " " + customer.lastName
           tr
-            td Email
+            td 
+              strong Email
             td= customer.email
           if customer.subscription
             tr 
-              td Status
+              td 
+                strong Status
               td(class=customer.subscription.status === 'active' ? 'green' : 'orange')= customer.subscription.status
             tr 
-              td Description
+              td 
+                strong Description
               td= customer.subscription.description
             tr 
-              td Amount
+              td 
+                strong Amount
               td €#{customer.subscription.amount}
           else
             tr 
-              td Status
+              td 
+                strong Status
               td Pending
         p 
           small You're subscription will auto renew, please email us at <a href="maito:dan@partywith.co">dan@partywith.co</a> to cancel your subscription at any given time.
+        
