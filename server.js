@@ -70,6 +70,53 @@ app.all("/checkout", function (req, res) {
   res.render('checkout', {name: name, amount: amount, type:type});
 });
 
+app.all('/patron', function(req, res){
+  
+  var sess = req.session;
+  var amount;
+  var name;
+  var type;
+  if(req.body.item === 'champion') {
+      name = 'Party Champion: (1 year)';
+      type = 'champion';
+      amount = 20.00;    
+  } else if(req.body.item === 'championl') {
+      name = 'Party Champion (lifetime!)';
+      type = 'championl';
+      amount = 50.00;    
+  }
+
+  mollie.payments.create({
+    amount:      amount,
+    description: `${name}`,
+    redirectUrl: process.env.BASEURL + "/thanks",
+    webhookUrl:  process.env.BASEURL + "/webhook"
+    }, function (payment) {
+        res.writeHead(302, { Location: payment.getPaymentUrl() })
+        var newOrder = {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          comment: req.body.comment,
+          orderId: payment.id,
+          orderType: type,
+          orderName: name,
+          amount: amount,
+          order: payment
+        }
+        sess.paymentId = payment.id;   
+        Order.create(newOrder, function(err, order){
+          if(err) {
+            console.log(err)
+          } else {
+            res.end();
+          }
+        });    
+        res.end();
+    });
+   
+});
+
 
 app.all('/webhook', function(req, res){
   var paymentId = req.body.id;  
