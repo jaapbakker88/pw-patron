@@ -24,14 +24,9 @@ block content
               p <strong>Become a Champion</strong>
               | For the price of a few drinks out in good company!
           footer
-            .item12
-              form(action="/checkout" method="post")
-                input(type="hidden" name="item" value="champion")
-                button 1 Year (€20.00)
-            .item12
-              form(action="/checkout" method="post")
-                input(type="hidden" name="item" value="championl")
-                button Lifetime! (€50.00)
+            a.item12(href="https://payments.partywith.co/f/championm") 1 Year (€20.00)
+            a.item12(href="https://payments.partywith.co/f/championl") Lifetime! (€50.00)
+              
         div.box.has-text-centered(style="margin: 0 0 1em;")
           a(href="/invest" style="margin:0 0 1em; padding: ; height: 3.25em;") <strong>Become an Investor Instead</strong> <br> & Own a Piece of the Company 
   .container

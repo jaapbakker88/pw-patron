@@ -169,24 +169,27 @@ a {
 .option footer .item12 {
   width: 50%;
   float: left;
-  padding: 5px;
+  padding: 1.2em;
   height: 100%;
+  text-align:center;
+  background: #fff; 
 }
 
 .option footer .item12:first-child {
   border-right: 1px solid #f2f0ed;
 }
-.option footer .item12 form button {
-  width: 100%;
-  height: 100%;
+.option footer .item12 {
   background: #fff;
   border: none;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
 }
-.option footer .item12 form button:hover {
+.option footer .item12:hover {
   background: #30baed;
+  color: #fff;
+}
+.option footer .item12:hover a {
   color: #fff;
 }
   
